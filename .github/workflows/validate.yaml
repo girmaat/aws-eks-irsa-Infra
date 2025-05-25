@@ -1,0 +1,49 @@
+name: Validate IRSA Demo
+
+on:
+  workflow_dispatch:        # Trigger manually from GitHub Actions UI
+  push:
+    paths:
+      - 'k8s/**'
+      - 'scripts/**'
+      - '.github/workflows/validate.yaml'
+
+jobs:
+  validate-irsa:
+    name: Validate IRSA Setup
+    runs-on: ubuntu-latest
+
+    env:
+      CLUSTER_NAME: my-eks-cluster
+      REGION: us-east-1
+      NAMESPACE: irsa-demo
+      POD_NAME: irsa-demo
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.REGION }}
+
+    - name: Setup kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: 'latest'
+
+    - name: Update kubeconfig for EKS
+      run: |
+        aws eks update-kubeconfig --region $REGION --name $CLUSTER_NAME
+
+    - name: Check if IRSA pod exists
+      run: |
+        kubectl get pod -n $NAMESPACE $POD_NAME
+
+    - name: Validate AWS identity inside pod
+      run: |
+        kubectl exec -n $NAMESPACE $POD_NAME -- \
+        aws sts get-caller-identity

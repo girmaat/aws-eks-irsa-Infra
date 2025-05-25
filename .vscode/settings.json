@@ -1,0 +1,14 @@
+{
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "yaml.validate": true,
+  "yaml.schemas": {
+    "https://json.schemastore.org/kubernetes.json": "*.yaml"
+  },
+  "terminal.integrated.shell.linux": "/bin/bash",
+  "[shellscript]": {
+    "editor.formatOnSave": true
+  }
+}

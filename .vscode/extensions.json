@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "redhat.vscode-yaml",
+    "ms-azuretools.vscode-docker",
+    "hashicorp.terraform",
+    "timonwong.shellcheck",
+    "mhutchie.git-graph",
+    "eamodio.gitlens",
+    "amazonwebservices.aws-toolkit-vscode"
+  ]
+}
